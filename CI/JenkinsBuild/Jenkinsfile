@@ -1,0 +1,69 @@
+jfrog_cli_path="/usr/local/bin"
+
+pipeline {
+    
+    agent none
+    
+    environment {
+        JFROG_CLI_HOME="/opt/jfrog"
+        ARTY_URL='http://192.168.41.41:8081/artifactory'
+        ARTY_CREDS=credentials('art_apikey')
+        ARTY_MAIN_REPO="eva-conda"
+        ARTY_ID="art"
+        REPOSITORY_TYPE="conda"
+        PROJECT_NAME="eva"
+        DRY_RUN="false"
+    }
+
+    parameters {
+        string(name: 'agent', defaultValue: 'linux', description: 'Jenkins agent name')
+    }
+    
+    stages {
+        
+        stage("Config env") {
+           agent { label params.agent }
+           steps {
+                git credentialsId: 'cyan21', branch: 'master', url: 'https://github.com/cyan21/conda-pipeline.git'
+                
+                sh "cp CI/JenkinsBuild/Dockerfile . " 
+           }
+        }
+
+        stage("Build package") {
+           agent { label params.agent dockerfile {
+                   additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"
+               }
+           }
+           steps {
+                sh '''
+                    jfrog --version
+                    conda info
+                    scripts/init.sh -c /opt/jfrog/.condarc -u ${ARTY_CREDS_USR} -k ${ARTY_CREDS_PSW} -l $ARTY_URL -r $ARTY_MAIN_REPO
+                    scripts/build.sh -i $JOB_NAME -n $BUILD_NUMBER -c /opt/conda/pkgs -r $ARTY_MAIN_REPO -a $ARTY_ID
+                '''
+            }
+        }
+
+        stage("Integration testing") {
+            agent { label params.agent }
+            steps {
+                sh '''
+                    echo deploying ...
+                    echo testing ...
+                '''
+            }
+        }
+
+        stage('Promote Build Info to UAT') {
+            agent { label "jfrog_cli" }
+            steps {
+                withEnv(["PATH+EXTRA=${jfrog_cli_path}"]) {  
+                    sh "jfrog rt bpr --url=${ARTY_URL} --user=${ARTY_CREDS_USR} --apikey=${ARTY_CREDS_PSW} --status='UAT' --comment='passed integration tests' --dry-run=${DRY_RUN} $JOB_NAME $BUILD_ID ${PROJECT_NAME}-${REPOSITORY_TYPE}-uat-local"
+                }
+            }    
+        }
+
+    } // end stages
+}         
+
