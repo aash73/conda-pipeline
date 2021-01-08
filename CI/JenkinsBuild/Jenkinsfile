@@ -55,6 +55,7 @@ pipeline {
             }
         }
 
+/*        
         stage('Promote Build Info to UAT') {
             agent { label "jfrog_cli" }
             steps {
@@ -63,6 +64,7 @@ pipeline {
                 }
             }    
         }
+*/
 
     } // end stages
 }         
