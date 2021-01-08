@@ -22,7 +22,7 @@ pipeline {
     stages {
         
         stage("Config env") {
-           agent { label params.agent }
+           //agent { label params.agent }
            steps {
                 git credentialsId: 'aash73', branch: 'master', url: 'https://github.com/aash73/conda-pipeline.git'
                 
