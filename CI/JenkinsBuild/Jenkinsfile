@@ -2,7 +2,7 @@ jfrog_cli_path="/usr/local/bin"
 
 pipeline {
     
-    agent none
+    agent any
     
     environment {
         JFROG_CLI_HOME="/opt/jfrog"
@@ -46,7 +46,7 @@ pipeline {
         }
 
         stage("Integration testing") {
-            agent { label params.agent }
+            //agent { label params.agent }
             steps {
                 sh '''
                     echo deploying ...
