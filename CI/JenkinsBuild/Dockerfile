@@ -1,5 +1,5 @@
 FROM continuumio/miniconda3:4.7.12 
-LABEL maintainer="yannc@jfrog.com"
+LABEL maintainer="asimp@jfrog.com"
 
 ARG ARTY_URL
 ARG ARTY_USER
