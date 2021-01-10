@@ -37,7 +37,6 @@ pipeline {
            }
            steps {
                 sh '''
-                    sudo su
                     jfrog --version
                     conda info
                     scripts/init.sh -c /opt/jfrog/.condarc -u ${ARTY_CREDS_USR} -k ${ARTY_CREDS_PSW} -l $ARTY_URL -r $ARTY_MAIN_REPO
