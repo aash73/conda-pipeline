@@ -13,6 +13,17 @@ usage()
   exit 2
 }
 
+checkVar() 
+{
+  for e in $1; do 
+    echo "[C-INFO] $e : ${!e}"
+    if [ "${!e}" == "" ]; then
+      echo "[C-ERROR] $e not set"
+      exit 1
+    fi
+  done
+}
+
 condarc_file=/root/.condarc
 
 while getopts 'hc:k:l:r:u:' opt 
@@ -29,16 +40,23 @@ do
   esac
 done
 
+checkVar "condarc_file art_user art_apikey repo_name"
+
+echo "[C-INFO] Removing default Channels from Conda config ... "
 conda config --remove channels defaults
 
+echo "[C-INFO] Printing CondaInfo BEFORE changes to CondaRC file ... "
 conda info 
 
+echo "[C-INFO] Making changes to CondaRC file ... "
 cat <<EOF > $condarc_file
 auto_activate_base: false
 default_channels:
   - ${protocol}://${art_user}:${art_apikey}@${art_host}/api/conda/${repo_name}
 EOF
 
+echo "[C-INFO] Printing CondaRC file ... "
 cat $condarc_file
 
+echo "[C-INFO] Printing CondaInfo AFTER changes to CondaRC file ... "
 conda info
