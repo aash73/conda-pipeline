@@ -14,11 +14,11 @@ pipeline {
         PROJECT_NAME="team1"
         DRY_RUN="false"
     }
-
+/*
     parameters {
         string(name: 'agent', defaultValue: 'master', description: 'Jenkins agent name')
     }
-    
+*/    
     stages {
         
         stage("Config env") {
@@ -31,7 +31,7 @@ pipeline {
         }
 
         stage("Build package") {
-           agent { label params.agent dockerfile {
+           agent { label 'DockerAgent' dockerfile {
                    additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"
                }
            }
