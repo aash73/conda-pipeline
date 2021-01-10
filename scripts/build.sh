@@ -11,9 +11,9 @@ usage()
 checkVar() 
 {
   for e in $1; do 
-    echo "[INFO] $e : ${!e}"
+    echo "[C-INFO] $e : ${!e}"
     if [ "${!e}" == "" ]; then
-      echo "[ERROR] $e not set"
+      echo "[C-ERROR] $e not set"
       exit 1
     fi
   done
@@ -37,28 +37,28 @@ done
 
 checkVar "build_id build_number target_repo arty_id"
 
-echo "[INFO] pinging Artifactory ..."
+echo "[C-INFO] pinging Artifactory ..."
 jfrog rt c show
 jfrog rt use $arty_id
 jfrog rt curl api/system/ping
 
 if [ $? -eq 0 ]; then 
-  echo -e "\n[INFO] ping OK !"
+  echo -e "\n[C-INFO] ping OK !"
 else
-  echo -e "\n[ERROR] ping KO !!"
+  echo -e "\n[C-ERROR] ping KO !!"
   exit 1
 fi
 
-echo "[INFO] installing dependencies ..."
+echo "[C-INFO] installing dependencies ..."
 while read requirement; do conda install --yes $requirement; done < requirements.txt
 
 jfrog rt bad $build_id $build_number "$pkg_cache/*.tar.bz2"
 
-echo "[INFO] dependencies installed !"
+echo "[C-INFO] dependencies installed !"
 
-echo "[INFO] uploading conda package to Artifactory ... "
+echo "[C-INFO] uploading conda package to Artifactory ... "
 jfrog rt u whitebox-0.5.1-py37_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
-echo "[INFO] conda package uploaded !"
+echo "[C-INFO] conda package uploaded !"
 
 jfrog rt bce $build_id $build_number
 jfrog rt bp $build_id $build_number
