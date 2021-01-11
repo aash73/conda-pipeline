@@ -56,6 +56,10 @@ jfrog rt bad $build_id $build_number "$pkg_cache/*.tar.bz2"
 
 echo "[C-INFO] dependencies installed !"
 
+echo "[C-INFO] Building Spaghetti-feedstock pkg......"
+
+conda build -b spaghetti-feedstock/recipe
+
 echo "[C-INFO] uploading conda package to Artifactory ... "
 jfrog rt u whitebox-0.5.1-py37_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
 echo "[C-INFO] conda package uploaded !"
