@@ -25,6 +25,7 @@ pipeline {
            //agent { label params.agent }
            steps {
                 git credentialsId: 'github-Asim', branch: 'master', url: 'https://github.com/aash73/conda-pipeline.git'
+                git credentialsId: 'github-Asim', branch: 'master', url: 'https://github.com/conda-forge/spaghetti-feedstock.git'
                 
                 sh "cp CI/JenkinsBuild/Dockerfile . " 
            }
