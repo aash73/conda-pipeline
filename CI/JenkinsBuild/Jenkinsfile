@@ -2,7 +2,7 @@ jfrog_cli_path="/usr/local/bin"
 
 pipeline {
     
-    agent any
+    agent none
     
     environment {
         JFROG_CLI_HOME="/opt/jfrog"
@@ -22,7 +22,7 @@ pipeline {
     stages {
         
         stage("Config env") {
-           //agent { label params.agent }
+           agent { label 'master' }
            steps {
                 git credentialsId: 'github-Asim', branch: 'master', url: 'https://github.com/aash73/conda-pipeline.git'
                 
