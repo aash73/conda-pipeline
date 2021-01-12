@@ -49,19 +49,23 @@ else
   exit 1
 fi
 
-echo "[C-INFO] installing dependencies ..."
-while read requirement; do conda install --yes $requirement; done < requirements.txt
+export BUILD_NUMBER=build_number
 
-jfrog rt bad $build_id $build_number "$pkg_cache/*.tar.bz2"
+mkdir /var/tmp/condabuild
 
-echo "[C-INFO] dependencies installed !"
+#echo "[C-INFO] installing dependencies ..."
+#while read requirement; do conda install --yes $requirement; done < requirements.txt
+
+#jfrog rt bad $build_id $build_number "$pkg_cache/*.tar.bz2"
+
+#echo "[C-INFO] dependencies installed !"
 
 echo "[C-INFO] Building Spaghetti-feedstock pkg......"
 
-conda build -b spaghetti-feedstock/recipe
+conda build --no-anaconda-upload --no-test --output-folder /var/tmp/condabuild/ spaghetti-feedstock/recipe/
 
 echo "[C-INFO] uploading conda package to Artifactory ... "
-jfrog rt u whitebox-0.5.1-py37_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
+jfrog rt u /var/tmp/condabuild/noarch/spaghetti-1.5.6-py_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
 echo "[C-INFO] conda package uploaded !"
 
 jfrog rt bce $build_id $build_number
