@@ -46,7 +46,7 @@ pipeline {
         }
 
         stage("Integration testing") {
-            //agent { label params.agent }
+            agent { label 'master' }
             steps {
                 sh '''
                     echo deploying ...
