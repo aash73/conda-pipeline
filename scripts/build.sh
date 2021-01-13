@@ -65,9 +65,24 @@ echo "[C-INFO] Building Spaghetti-feedstock pkg......"
 
 conda build --no-anaconda-upload --no-test --output-folder $output_fldr spaghetti-feedstock/recipe/
 
+if [ $? -ne 0 ]; then 
+  echo -e "\n[C-ERROR] Conda Build Failed ..."
+  exit 1
+fi
+
+#To Test the build
+#conda build -t --output-folder /Users/asimp/conda-examples/conda-pipeline/condabuild/ ./spaghetti-feedstock/recipe/
+#conda build -t condabuild/noarch/spaghetti-1.5.6-py_0.tar.bz2
+
 echo "[C-INFO] uploading conda package to Artifactory ... "
 jfrog rt u $output_fldr/noarch/spaghetti-1.5.6-py_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
-echo "[C-INFO] conda package uploaded !"
+
+if [ $? -eq 0 ]; then 
+  echo -e "\n[C-INFO] conda package uploaded !"
+else
+  echo -e "\n[C-ERROR] Conda Package upload failed ... !!"
+  exit 1
+fi
 
 jfrog rt bce $build_id $build_number
 jfrog rt bp $build_id $build_number
