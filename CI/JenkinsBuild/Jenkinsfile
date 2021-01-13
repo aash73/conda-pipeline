@@ -2,7 +2,7 @@ jfrog_cli_path="/usr/local/bin"
 
 pipeline {
     
-    agent {label 'DockerAgent' dockerfile {additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"}}
+    agent none
     
     environment {
         JFROG_CLI_HOME="/opt/jfrog"
@@ -27,11 +27,11 @@ pipeline {
            }
         }
 
-        /*stage("Build package") {
+        stage("Build package") {
            agent { label 'DockerAgent' dockerfile {
                    additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"
                }
-           }*/
+           }
            steps {
                 sh '''
                     jfrog --version
@@ -43,11 +43,11 @@ pipeline {
         }
 
         stage("Integration testing") {
-            //agent { label 'DockerAgent' }
+            agent { label 'master' }
             steps {
                 sh '''
                     echo Testing ...
-                    conda build -t --output-folder $CONDABLD_OUTPUT_FOLDER spaghetti-feedstock/recipe/
+                    //conda build -t --output-folder $CONDABLD_OUTPUT_FOLDER spaghetti-feedstock/recipe/
                     echo Testing Finished ...
                 '''
             }
