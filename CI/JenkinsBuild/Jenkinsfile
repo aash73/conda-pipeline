@@ -27,7 +27,7 @@ pipeline {
            }
         }
 
-        stage("Build package") {
+        stage("Build & Upload") {
            agent { label 'DockerAgent' dockerfile {
                    additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"
                }
@@ -41,27 +41,6 @@ pipeline {
                 '''
             }
         }
-
-        stage("Integration testing") {
-            agent { label 'master' }
-            steps {
-                sh '''
-                    echo Testing ...
-                    echo Testing Finished ...
-                '''
-            }
-        }
-
-/*        
-        stage('Promote Build Info to UAT') {
-            agent { label "jfrog_cli" }
-            steps {
-                withEnv(["PATH+EXTRA=${jfrog_cli_path}"]) {  
-                    sh "jfrog rt bpr --url=${ARTY_URL} --user=${ARTY_CREDS_USR} --apikey=${ARTY_CREDS_PSW} --status='UAT' --comment='passed integration tests' --dry-run=${DRY_RUN} $JOB_NAME $BUILD_ID ${PROJECT_NAME}-${REPOSITORY_TYPE}-uat-local"
-                }
-            }    
-        }
-*/
 
     } // end stages
 }         
