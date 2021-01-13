@@ -8,7 +8,7 @@ pipeline {
         JFROG_CLI_HOME="/opt/jfrog"
         ARTY_URL='http://artifactory-unified.soleng-us.jfrog.team/artifactory'
         ARTY_CREDS=credentials('artifactory-admin')
-        ARTY_MAIN_REPO="team1-conda"
+        ARTY_MAIN_REPO="conda"
         ARTY_ID="art"
         REPOSITORY_TYPE="conda"
         PROJECT_NAME="team1"
