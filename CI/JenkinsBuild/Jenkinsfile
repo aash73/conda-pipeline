@@ -47,7 +47,6 @@ pipeline {
             steps {
                 sh '''
                     echo Testing ...
-                    //conda build -t --output-folder $CONDABLD_OUTPUT_FOLDER spaghetti-feedstock/recipe/
                     echo Testing Finished ...
                 '''
             }
