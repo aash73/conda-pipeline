@@ -54,13 +54,6 @@ export BUILD_NUMBER=build_number
 
 mkdir $output_fldr
 
-#echo "[C-INFO] installing dependencies ..."
-#while read requirement; do conda install --yes $requirement; done < requirements.txt
-
-#jfrog rt bad $build_id $build_number "$pkg_cache/*.tar.bz2"
-
-#echo "[C-INFO] dependencies installed !"
-
 echo "[C-INFO] Building Spaghetti-feedstock pkg......"
 
 conda build --no-anaconda-upload --no-test --output-folder $output_fldr spaghetti-feedstock/recipe/
