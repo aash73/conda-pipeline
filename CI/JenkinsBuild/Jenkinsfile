@@ -13,12 +13,9 @@ pipeline {
         REPOSITORY_TYPE="conda"
         PROJECT_NAME="team1"
         DRY_RUN="false"
+        CONDABLD_OUTPUT_FOLDER="/var/tmp/condabuild"
     }
-/*
-    parameters {
-        string(name: 'agent', defaultValue: 'master', description: 'Jenkins agent name')
-    }
-*/    
+    
     stages {
         
         stage("Config env") {
@@ -40,7 +37,7 @@ pipeline {
                     jfrog --version
                     conda info
                     scripts/init.sh -c /opt/jfrog/.condarc -u ${ARTY_CREDS_USR} -k ${ARTY_CREDS_PSW} -l $ARTY_URL -r $ARTY_MAIN_REPO
-                    scripts/build.sh -i $JOB_NAME -n $BUILD_NUMBER -c /opt/conda/pkgs -r $ARTY_MAIN_REPO -a $ARTY_ID
+                    scripts/build.sh -i $JOB_NAME -n $BUILD_NUMBER -c /opt/conda/pkgs -r $ARTY_MAIN_REPO -a $ARTY_ID -o $CONDABLD_OUTPUT_FOLDER
                 '''
             }
         }
