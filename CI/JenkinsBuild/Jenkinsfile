@@ -43,11 +43,12 @@ pipeline {
         }
 
         stage("Integration testing") {
-            agent { label 'master' }
+            agent { label 'DockerAgent' }
             steps {
                 sh '''
-                    echo deploying ...
-                    echo testing ...
+                    echo Testing ...
+                    conda build -t --output-folder $CONDABLD_OUTPUT_FOLDER spaghetti-feedstock/recipe/
+                    echo Testing Finished ...
                 '''
             }
         }
