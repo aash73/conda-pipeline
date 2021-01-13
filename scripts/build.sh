@@ -63,10 +63,10 @@ mkdir $output_fldr
 
 echo "[C-INFO] Building Spaghetti-feedstock pkg......"
 
-conda build --no-anaconda-upload --no-test --output-folder $output-fldr spaghetti-feedstock/recipe/
+conda build --no-anaconda-upload --no-test --output-folder $output_fldr spaghetti-feedstock/recipe/
 
 echo "[C-INFO] uploading conda package to Artifactory ... "
-jfrog rt u $output-fldr/noarch/spaghetti-1.5.6-py_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
+jfrog rt u $output_fldr/noarch/spaghetti-1.5.6-py_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
 echo "[C-INFO] conda package uploaded !"
 
 jfrog rt bce $build_id $build_number
