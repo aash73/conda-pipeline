@@ -3,7 +3,7 @@
 usage()
 {
   echo -e "==============================================================\n"
-  echo -e "Usage:\n\t $0 -i build_id -n build_number -c pkg_cache -r target_repo -a arty_id [-v]"
+  echo -e "Usage:\n\t $0 -i build_id -n build_number -c pkg_cache -r target_repo -a arty_id -o output_fldr [-v]"
   echo -e "==============================================================\n"
   exit 2
 }
@@ -23,7 +23,7 @@ checkVar()
 #### MAIN 		
 #####################################
 
-while getopts 'ha:c:i:n:r:t:' opt 
+while getopts 'ha:c:i:n:r:o:t:' opt 
 do
   case $opt in
     a) arty_id=$OPTARG ;;
@@ -31,11 +31,12 @@ do
     n) build_number=$OPTARG ;;
     c) pkg_cache=$OPTARG ;;
     r) target_repo=$OPTARG ;;
+    o) output_fldr=$OPTARG ;;
     h) usage ;;
   esac
 done
 
-checkVar "build_id build_number target_repo arty_id"
+checkVar "build_id build_number target_repo arty_id output_fldr"
 
 echo "[C-INFO] pinging Artifactory ..."
 jfrog rt c show
@@ -51,7 +52,7 @@ fi
 
 export BUILD_NUMBER=build_number
 
-mkdir /var/tmp/condabuild
+mkdir $output-fldr
 
 #echo "[C-INFO] installing dependencies ..."
 #while read requirement; do conda install --yes $requirement; done < requirements.txt
@@ -62,10 +63,10 @@ mkdir /var/tmp/condabuild
 
 echo "[C-INFO] Building Spaghetti-feedstock pkg......"
 
-conda build --no-anaconda-upload --no-test --output-folder /var/tmp/condabuild/ spaghetti-feedstock/recipe/
+conda build --no-anaconda-upload --no-test --output-folder $output-fldr spaghetti-feedstock/recipe/
 
 echo "[C-INFO] uploading conda package to Artifactory ... "
-jfrog rt u /var/tmp/condabuild/noarch/spaghetti-1.5.6-py_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
+jfrog rt u $output-fldr/noarch/spaghetti-1.5.6-py_0.tar.bz2 $target_repo/ --build-name=$build_id --build-number=$build_number
 echo "[C-INFO] conda package uploaded !"
 
 jfrog rt bce $build_id $build_number
