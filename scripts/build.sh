@@ -52,7 +52,7 @@ fi
 
 export BUILD_NUMBER=build_number
 
-mkdir $output-fldr
+mkdir $output_fldr
 
 #echo "[C-INFO] installing dependencies ..."
 #while read requirement; do conda install --yes $requirement; done < requirements.txt
