@@ -2,10 +2,7 @@ jfrog_cli_path="/usr/local/bin"
 
 pipeline {
     
-    agent { label 'DockerAgent' dockerfile {
-                   additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"
-               }
-          }
+    agent {label 'DockerAgent' dockerfile {additionalBuildArgs  "--build-arg ARTY_URL=${env.ARTY_URL} --build-arg ARTY_USER=${ARTY_CREDS_USR} --build-arg ARTY_APIKEY=${ARTY_CREDS_PSW} --build-arg ARTY_ID=${env.ARTY_ID}"}}
     
     environment {
         JFROG_CLI_HOME="/opt/jfrog"
