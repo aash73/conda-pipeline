@@ -27,11 +27,10 @@ checkVar()
 #arg2 build number
 #arg3 conda package output dir
 generate_conda_package_path() {
-  echo "1st Arg =  " $1
-  echo "2nd Arg =  " $2
-  echo "3rd Arg =  " $3
-  v_name=$(awk '/{% set name =/ {print $5}' $1)
-  v_number=$(awk '/{% set version =/ {print $5}' $1)
+  #echo "1st Arg =  " $1
+  #echo "2nd Arg =  " $2
+  #echo "3rd Arg =  " $3
+  v_name=$(awk '/{% set name =/ {print $5}' $1) && v_number=$(awk '/{% set version =/ {print $5}' $1)
   v_name=$(eval echo $v_name) && v_number=$(eval echo $v_number)
   #echo "Version Name =  " $v_name
   #echo "Version Number =  " $v_number
