@@ -13,8 +13,7 @@ source:
 
 build:
   noarch: python
-  #number: {{ environ.get("BUILD_NUMBER") }}
-  number: 0 
+  number: {{ environ.get("BUILD_NUMBER") }}
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
