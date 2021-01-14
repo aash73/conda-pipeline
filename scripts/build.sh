@@ -71,7 +71,7 @@ else
   exit 1
 fi
 
-export BUILD_NUMBER=build_number
+export BUILD_NUMBER=$build_number
 
 mkdir $output_fldr
 
