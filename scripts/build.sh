@@ -35,7 +35,7 @@ generate_conda_package_path() {
   v_name=$(eval echo $v_name) && v_number=$(eval echo $v_number)
   #echo "Version Name =  " $v_name
   #echo "Version Number =  " $v_number
-  package_path="${3}/${v_name}-${v_number}-py_${2}.tar.bz2"
+  package_path="${3}/noarch/${v_name}-${v_number}-py_${2}.tar.bz2"
   #echo "Package Path = " $package_path
   return 0
 }
